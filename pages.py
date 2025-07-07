@@ -36,11 +36,11 @@ class UrbanRoutesPage:
 	BLANKET_AND_HANDKERCHIEFS_DOM = (By.XPATH, "//div[@class='r-sw-label' and contains(text(), 'Blanket and handkerchiefs')]/following-sibling::div[@class='r-sw']//span")
 	BLANKET_AND_HANDKERCHIEFS_SWITCH = (By.XPATH, "//div[@class='r-sw-label' and contains(text(), 'Blanket and handkerchiefs')]/following-sibling::div[@class='r-sw']//input")
 
-	ICE_CREAM_PLUS = (By.XPATH, "//div[@class='r-counter-label']/following-sibling::div[@class='r-counter']//div[@class='counter-plus']")
-	ICE_CREAM_VALUE = (By.XPATH, "//div[@class='r-counter-label']/following-sibling::div[@class='r-counter']//div[@class='counter-value']")
+	ICE_CREAM_PLUS = (By.XPATH, "//div[text()='Ice cream']/following-sibling::div[@class='r-counter']//div[@class='counter-plus']")
+	ICE_CREAM_VALUE = (By.XPATH, "//div[text()='Ice cream']/following-sibling::div[@class='r-counter']//div[@class='counter-value']")
 
-	ENTER_NUMBER_ORDER_BUTTON = ()
-	CAR_SEARCH_MODEL = ()
+	ORDER_BUTTON = (By.CLASS_NAME, "smart-button")
+	CAR_SEARCH_MODEL = (By.CLASS_NAME, "order-body")
 
 	# ----- FUNCTIONS -----
 	def __init__(self, driver):
@@ -71,30 +71,20 @@ class UrbanRoutesPage:
 
 	# Select tariff/plan
 	def select_plan(self):
-		supportive_plan_element = self.wait.until(EC.element_to_be_clickable(self.SUPPORTIVE_PLAN))
-		supportive_plan_element.click()
-
-	# Check for 'active' version of the element
-	# Wait until state change by waiting for 'active' version of this element
-	def check_for_plan(self):
-		self.wait.until(EC.presence_of_element_located(self.SELECTED_SUPPORTIVE_PLAN))
-		print("\nSupportive plan selected")
+		self.wait.until(EC.element_to_be_clickable(self.SUPPORTIVE_PLAN)).click()
 
 	# Fill phone number
 	def fill_phone_number(self, phone_number):
 		self.wait.until(EC.visibility_of_element_located(self.PHONE_NUMBER_LINK)).click()
-		phone_input = self.wait.until(EC.visibility_of_element_located(self.PHONE_NUMBER_INPUT))
-		phone_input.send_keys(phone_number)
+		self.wait.until(EC.visibility_of_element_located(self.PHONE_NUMBER_INPUT)).send_keys(phone_number)
 		self.driver.find_element(*self.PHONE_NUMBER_NEXT_BUTTON).click()
-		self.wait.until(EC.visibility_of_element_located(self.PHONE_CODE_INPUT))
 
 	# Enter confirmation code
 	def enter_confirmation_code(self, code):
-		self.wait.until(EC.presence_of_element_located(self.MODAL))
-		self.driver.find_element(*self.PHONE_CODE_INPUT).send_keys(code)
+		# Wait for phone code field visibility to enter the code
+		self.wait.until(EC.visibility_of_element_located(self.PHONE_CODE_INPUT)).send_keys(code)
+		# Find and click submit button
 		self.driver.find_element(*self.PHONE_CODE_SUBMIT).click()
-		# Wait for modal to close before moving on.
-		self.wait.until(EC.invisibility_of_element_located(self.MODAL))
 
 	# Fill payment card
 	def fill_card(self, card_number, card_code):
@@ -102,16 +92,13 @@ class UrbanRoutesPage:
 		self.driver.find_element(*self.ADD_PAYMENT_BUTTON).click()
 		# Wait for the "Add card" button to appear and click it
 		self.wait.until(EC.element_to_be_clickable(self.ADD_CARD_BUTTON)).click()
-		# Wait for card input to appear
-		card_input = self.wait.until(EC.visibility_of_element_located(self.CARD_NUMBER_INPUT))
-		card_input.send_keys(card_number)
+		# Wait for card input to appear and send number
+		self.wait.until(EC.visibility_of_element_located(self.CARD_NUMBER_INPUT)).send_keys(card_number)
 		self.wait.until(EC.visibility_of_element_located(self.CARD_CODE_INPUT)).send_keys(card_code)
 		# Click the 'Link' button to submit the card
 		self.driver.find_element(*self.CARD_LINK_BUTTON).click()
 		# Click X to close the modal
 		self.wait.until(EC.element_to_be_clickable(self.MODAL_CLOSE)).click()
-		# Wait for modal to close before moving on.
-		self.wait.until(EC.invisibility_of_element_located(self.MODAL))
 
 	# Leave driver comment
 	def comment_for_driver(self):
@@ -127,10 +114,15 @@ class UrbanRoutesPage:
 		for _ in range(quantity):
 			plus_button.click()
 
-	# Retrieve number of ice creams selected and convert to integer
+	# Retrieve the number of ice creams selected and convert to integer
 	def get_ice_cream_value(self):
-		value_element = self.driver.find_element(*self.ICE_CREAM_VALUE)
+		value_element = self.wait.until(EC.visibility_of_element_located(self.ICE_CREAM_VALUE))
 		return int(value_element.text)
 
+	# Click final order button
+	def click_final_order(self):
+		self.driver.find_element(*self.ORDER_BUTTON).click()
+
+	# Car search modal appears
 	def car_search_model_appears(self):
-		pass
+		self.wait.until(EC.visibility_of_element_located(self.CAR_SEARCH_MODEL))
