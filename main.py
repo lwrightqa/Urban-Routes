@@ -4,7 +4,6 @@ from helpers import retrieve_phone_code
 from pages import UrbanRoutesPage
 from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
 import time
 
 class TestUrbanRoutes:
@@ -41,8 +40,8 @@ class TestUrbanRoutes:
     def test_select_plan(self):
         # Select the plan
         self.routes.select_plan()
-        # Ensure 'Supportive' plan is selected/highlighted.
-        WebDriverWait(self.driver, 5).until(EC.presence_of_element_located(self.routes.SELECTED_SUPPORTIVE_PLAN))
+        # Assert 'Supportive' plan is selected/highlighted.
+        assert EC.presence_of_element_located(self.routes.SELECTED_SUPPORTIVE_PLAN)
         print("\nSupportive plan selected")
 
     # Click and fill in the phone number model
@@ -83,7 +82,7 @@ class TestUrbanRoutes:
     # Request blanket and handkerchiefs option
     def test_order_blanket_and_handkerchiefs(self):
         self.routes.order_blanket_and_handkerchiefs()
-        # Ensure blanket and handkerchiefs option was selected
+        # Ensure the blanket and handkerchiefs option was selected
         assert self.driver.find_element(*self.routes.BLANKET_AND_HANDKERCHIEFS_SWITCH).is_selected()
         print("\nBlanket and handkerchiefs selected")
 
@@ -97,8 +96,8 @@ class TestUrbanRoutes:
     # Click the button to search car models
     def test_car_search_model_appears(self):
         self.routes.click_final_order()
-        # Ensuring modal appears (Note: sometimes it appears and disappears quickly so I'm not sure if I'm supposed to validate the contents of the modal.
-        self.routes.car_search_model_appears()
+        # Assert modal appears
+        assert EC.presence_of_element_located(self.routes.CAR_SEARCH_MODEL)
 
     # Teardown Class
     @classmethod

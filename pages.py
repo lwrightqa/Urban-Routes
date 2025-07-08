@@ -119,7 +119,7 @@ class UrbanRoutesPage:
 		value_element = self.wait.until(EC.visibility_of_element_located(self.ICE_CREAM_VALUE))
 		return int(value_element.text)
 
-	# Click final order button
+	# Click the final order button
 	def click_final_order(self):
 		self.driver.find_element(*self.ORDER_BUTTON).click()
 
