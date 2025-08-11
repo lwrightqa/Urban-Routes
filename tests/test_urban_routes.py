@@ -1,7 +1,7 @@
 import data
 import helpers
 from helpers import retrieve_phone_code
-from pages import UrbanRoutesPage
+from urban_routes import UrbanRoutesPage
 from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as EC
 import time
