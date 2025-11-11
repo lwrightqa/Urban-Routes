@@ -1,3 +1,6 @@
+
+<img width="1681" height="940" alt="Screenshot 2025-11-11 123504" src="https://github.com/user-attachments/assets/353808fe-5372-408a-9f89-7d78e914661c" />
+
 # Urban Routes UI Automation Project
 
 This project contains an automated UI testing suite for the "Urban Routes" web application. It is built with Python and utilizes the Selenium WebDriver framework to simulate a user's journey of ordering a taxi.
