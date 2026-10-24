@@ -41,7 +41,7 @@ class TestUrbanRoutes:
         # Select the plan
         self.routes.select_plan()
         # Assert 'Supportive' plan is selected/highlighted.
-        assert EC.presence_of_element_located(self.routes.SELECTED_SUPPORTIVE_PLAN)
+        assert self.driver.find_element(*self.routes.SELECTED_SUPPORTIVE_PLAN).is_displayed()
         print("\nSupportive plan selected")
 
     # Click and fill in the phone number model
@@ -97,7 +97,7 @@ class TestUrbanRoutes:
     def test_car_search_model_appears(self):
         self.routes.click_final_order()
         # Assert modal appears
-        assert EC.presence_of_element_located(self.routes.CAR_SEARCH_MODEL)
+        assert self.driver.find_element(*self.routes.CAR_SEARCH_MODEL).is_displayed()
 
     # Teardown Class
     @classmethod
